@@ -1,0 +1,11 @@
+#.gitignore file
+
+Win8Debug/
+Win8Release/
+
+
+*.user
+*.swp
+*.suo
+*.sdf
+

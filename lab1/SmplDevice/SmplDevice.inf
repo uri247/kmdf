@@ -1,0 +1,91 @@
+;
+; SmplDevice.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Sample ; TODO: edit Class
+ClassGuid={78A1C341-4539-11d3-B88D-00C04FAD5171} ; TODO: edit ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=SmplDevice.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=SampleClassReg
+
+[SampleClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-5
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+SmplDevice.sys  = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%SmplDevice.DeviceDesc%=SmplDevice_Device, Root\SmplDevice ; TODO: edit hw-id
+
+[SmplDevice_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+SmplDevice.sys
+
+;-------------- Service installation
+[SmplDevice_Device.NT.Services]
+AddService = SmplDevice,%SPSVCINST_ASSOCSERVICE%, SmplDevice_Service_Inst
+
+; -------------- SmplDevice driver install sections
+[SmplDevice_Service_Inst]
+DisplayName    = %SmplDevice.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\SmplDevice.sys
+LoadOrderGroup = Extended Base
+
+;
+;--- SmplDevice_Device Coinstaller installation ------
+;
+
+[DestinationDirs]
+SmplDevice_Device_CoInstaller_CopyFiles = 11
+
+[SmplDevice_Device.NT.CoInstallers]
+AddReg=SmplDevice_Device_CoInstaller_AddReg
+CopyFiles=SmplDevice_Device_CoInstaller_CopyFiles
+
+[SmplDevice_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[SmplDevice_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[SourceDisksFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+[SmplDevice_Device.NT.Wdf]
+KmdfService =  SmplDevice, SmplDevice_wdfsect
+[SmplDevice_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="" ; TODO: add ManufacturerName
+ClassName="Samples" ; TODO: edit ClassName
+DiskName = "SmplDevice Installation Disk"
+SmplDevice.DeviceDesc = "SmplDevice Device"
+SmplDevice.SVCDESC = "SmplDevice Service"
