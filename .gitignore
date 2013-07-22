@@ -2,10 +2,14 @@
 
 Win8Debug/
 Win8Release/
+Debug/
+Release/
+ipch/
 
 
 *.user
 *.swp
 *.suo
 *.sdf
+*.opensdf
 
