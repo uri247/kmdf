@@ -23,6 +23,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
+    <None Include="Win8Debug\Device.tmh">
+      <Filter>Generated</Filter>
+    </None>
+    <None Include="Win8Debug\Driver.tmh">
+      <Filter>Generated</Filter>
+    </None>
+    <None Include="Win8Debug\Queue.tmh">
+      <Filter>Generated</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Inf Include="SmplDevice.inf">

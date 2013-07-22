@@ -52,6 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
+    <None Include="Win8Debug\Device.tmh" />
+    <None Include="Win8Debug\Driver.tmh" />
+    <None Include="Win8Debug\Queue.tmh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Device.c" />
