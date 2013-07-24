@@ -1,0 +1,102 @@
+;
+; SmplFltr.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Keyboard
+ClassGuid={4D36E96B-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+CatalogFile=SmplFltr.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+SmplFltr.sys  = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+;%SmplFltr.DeviceDesc%=SmplFltr_Device, Root\SmplFltr ; TODO: edit hw-id
+%SmplFltr.DeviceDesc%=SmplFltr_Device, *PNP0303
+
+[SmplFltr_Device.NT]
+Include=keyboard.inf
+Needs=STANDARD_Inst
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+SmplFltr.sys
+
+;-------------- Service installation
+[SmplFltr_Device.NT.Services]
+AddService = SmplFltr,%SPSVCINST_ASSOCSERVICE%, SmplFltr_Service_Inst
+; Install the generic keyboard driver from keyboard.inf
+Include=keyboard.inf
+Needs=STANDARD_Inst.Services
+
+; -------------- SmplFltr driver install sections
+[SmplFltr_Service_Inst]
+DisplayName    = %SmplFltr.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\SmplFltr.sys
+LoadOrderGroup = Extended Base
+
+
+[SmplFltr_Device.NT.HW]
+; Add the device upper filter
+AddReg = SmplFltr.HW.AddReg
+; run the directives need by the port driver
+Include=keyboard.inf
+;Needs=HID_Inst.NT.Services
+
+[SmplFltr_Device.HW.AddReg]
+HKLM,"SYSTEM\CurrentControlSet\Control\Class\{4D36E96B-E325-11CE-BFC1-08002BE10318}","UpperFilters",0x00010008,"SmplFltr"
+
+
+
+;
+;--- SmplFltr_Device Coinstaller installation ------
+;
+
+[DestinationDirs]
+SmplFltr_Device_CoInstaller_CopyFiles = 11
+
+[SmplFltr_Device.NT.CoInstallers]
+AddReg=SmplFltr_Device_CoInstaller_AddReg
+CopyFiles=SmplFltr_Device_CoInstaller_CopyFiles
+
+[SmplFltr_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[SmplFltr_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[SourceDisksFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+[SmplFltr_Device.NT.Wdf]
+KmdfService =  SmplFltr, SmplFltr_wdfsect
+[SmplFltr_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="LondonConsult" ; TODO: add ManufacturerName
+DiskName = "SmplFltr Installation Disk"
+SmplFltr.DeviceDesc = "SmplFltr Device"
+SmplFltr.SVCDESC = "SmplFltr Service"
+London="LondonConsult"
