@@ -64,8 +64,8 @@ Return Value:
     //
     WPP_INIT_TRACING( DriverObject, RegistryPath );
 
-    //TraceEvents(TRACE_LEVEL_INFORMATION, TRACE_DRIVER, "%!FUNC! Entry");
-	TraceEvents(DPFLTR_IHVDRIVER_ID, 1234, "%!FUNC! Entry");
+    TraceEvents(TRACE_LEVEL_INFORMATION, TRACE_DRIVER, "%!FUNC! Entry");
+	//TraceEvents(DPFLTR_IHVDRIVER_ID, 1234, "%!FUNC! Entry");
 
     //
     // Register a cleanup callback so that we can call WPP_CLEANUP when

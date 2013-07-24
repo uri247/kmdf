@@ -58,7 +58,7 @@ LoadOrderGroup = Extended Base
 
 [SmplFltr_Device.NT.HW]
 ; Add the device upper filter
-AddReg = SmplFltr.HW.AddReg
+AddReg = SmplFltr_Device.HW.AddReg
 ; run the directives need by the port driver
 Include=keyboard.inf
 ;Needs=HID_Inst.NT.Services
