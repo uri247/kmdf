@@ -48,12 +48,20 @@ Return Value:
     PDEVICE_CONTEXT deviceContext;
     WDFDEVICE device;
     NTSTATUS status;
+	WDF_OBJECT_ATTRIBUTES objAttr;
+	WDF_FILEOBJECT_CONFIG objConfig;	
 
     PAGED_CODE();
 
     WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&deviceAttributes, DEVICE_CONTEXT);
 
+	WDF_OBJECT_ATTRIBUTES_INIT(&objAttr);
+
+	WDF_FILEOBJECT_CONFIG_INIT( &objConfig, EvtDeviceFileCreate, WDF_NO_EVENT_CALLBACK, WDF_NO_EVENT_CALLBACK );
+	WdfDeviceInitSetFileObjectConfig( DeviceInit, &objConfig, &objAttr );
+
     status = WdfDeviceCreate(&DeviceInit, &deviceAttributes, &device);
+
 
     if (NT_SUCCESS(status)) {
         //
@@ -93,4 +101,17 @@ Return Value:
     return status;
 }
 
+
+VOID
+EvtDeviceFileCreate (
+    IN WDFDEVICE  Device,
+    IN WDFREQUEST  Request,
+    IN WDFFILEOBJECT  FileObject
+    )
+{
+	UNREFERENCED_PARAMETER(Device);
+	UNREFERENCED_PARAMETER(FileObject);
+
+	WdfRequestComplete(Request, STATUS_SUCCESS);
+}
 

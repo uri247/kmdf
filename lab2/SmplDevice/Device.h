@@ -41,3 +41,6 @@ SmplDeviceCreateDevice(
     _Inout_ PWDFDEVICE_INIT DeviceInit
     );
 
+
+
+EVT_WDF_DEVICE_FILE_CREATE EvtDeviceFileCreate;
