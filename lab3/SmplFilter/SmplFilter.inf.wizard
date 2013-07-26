@@ -1,0 +1,91 @@
+;
+; SmplFilter.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Sample ; TODO: edit Class
+ClassGuid={78A1C341-4539-11d3-B88D-00C04FAD5171} ; TODO: edit ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=SmplFilter.cat
+DriverVer= ; TODO: add DriverVer
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=SampleClassReg
+
+[SampleClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-5
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+SmplFilter.sys  = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%SmplFilter.DeviceDesc%=SmplFilter_Device, Root\SmplFilter ; TODO: edit hw-id
+
+[SmplFilter_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+SmplFilter.sys
+
+;-------------- Service installation
+[SmplFilter_Device.NT.Services]
+AddService = SmplFilter,%SPSVCINST_ASSOCSERVICE%, SmplFilter_Service_Inst
+
+; -------------- SmplFilter driver install sections
+[SmplFilter_Service_Inst]
+DisplayName    = %SmplFilter.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\SmplFilter.sys
+LoadOrderGroup = Extended Base
+
+;
+;--- SmplFilter_Device Coinstaller installation ------
+;
+
+[DestinationDirs]
+SmplFilter_Device_CoInstaller_CopyFiles = 11
+
+[SmplFilter_Device.NT.CoInstallers]
+AddReg=SmplFilter_Device_CoInstaller_AddReg
+CopyFiles=SmplFilter_Device_CoInstaller_CopyFiles
+
+[SmplFilter_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[SmplFilter_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[SourceDisksFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+[SmplFilter_Device.NT.Wdf]
+KmdfService =  SmplFilter, SmplFilter_wdfsect
+[SmplFilter_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="" ; TODO: add ManufacturerName
+ClassName="Samples" ; TODO: edit ClassName
+DiskName = "SmplFilter Installation Disk"
+SmplFilter.DeviceDesc = "SmplFilter Device"
+SmplFilter.SVCDESC = "SmplFilter Service"

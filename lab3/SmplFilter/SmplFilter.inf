@@ -1,0 +1,127 @@
+; SmplFilter.INF
+; Copyright (c) 2012 datronicsoft
+; This file is part of the training session for
+; developing WDF device drivers. It is used to
+; install the WDF version of the SmplFilter device driver.
+
+
+[Version]
+Signature="$Windows NT$"
+Provider=%DAT%
+ClassGUID={4D36E96B-E325-11CE-BFC1-08002BE10318}
+Class=Keyboard
+DriverVer=
+CatalogFile=SmplFilter.cat
+
+
+[DestinationDirs]
+DefaultDestDir = 12
+;
+; File sections
+;
+[SmplFilter.CopyFiles]
+SmplFilter.sys
+;
+; Driver information
+;
+[Manufacturer]
+%DAT% = DAT.Mfg,NT$ARCH$
+
+; For XP 32 and above
+[DAT.Mfg]
+;%DAT.DeviceDesc11% = SmplFilter, ACPI\PNP0303
+%DAT.DeviceDesc21% = SmplFilter, *PNP0303
+
+; For XP 64 and above
+[DAT.Mfg.NT$ARCH$]
+;%DAT.DeviceDesc11% = SmplFilter, ACPI\PNP0303
+%DAT.DeviceDesc21% = SmplFilter, *PNP0303
+;
+; General installation section
+;
+[SmplFilter.NT]
+; run the directives need by the port driver
+Include=keyboard.inf
+Needs=STANDARD_Inst
+; Copy the driver over
+CopyFiles=SmplFilter.CopyFiles
+;
+; Service Installation
+;
+[SmplFilter.NT.Services]
+AddService = SmplFilter,,SmplFilter_Service_Inst
+; Install the generic keyboard driver from keyboard.inf
+Include=keyboard.inf
+Needs=STANDARD_Inst.Services
+[SmplFilter_Service_Inst]
+DisplayName = %SmplFilter.SvcDesc%
+ServiceType = 1 ; SERVICE_KERNEL_DRIVER
+StartType = 3 ; SERVICE_DEMAND_START
+ErrorControl = 0 ; SERVICE_ERROR_IGNORE
+;LoadOrderGroup = Pointer Port
+ServiceBinary = %12%\SmplFilter.sys
+[SmplFilter.NT.HW]
+; Add the device upper filter
+AddReg = SmplFilter.HW.AddReg
+; run
+Include=keyboard.inf
+
+
+;Needs=HID_Inst.NT.Services
+[SmplFilter.HW.AddReg]
+HKLM,"SYSTEM\CurrentControlSet\Control\Class\{4D36E96B-E325-11CE-BFC1-08002BE10318}","UpperFilters",0x00010008,"SmplFilter"
+;
+; Source file information
+;
+[SourceDisksNames]
+1 = %DiskId1%,,,
+[SourceDisksFiles]
+SmplFilter.sys = 1,,
+;
+;--- SmplFilter Coinstaller installation ------
+;
+[DestinationDirs]
+SmplFilter_CoInstaller_CopyFiles = 11
+[SmplFilter.NT.CoInstallers]
+AddReg=SmplFilter_CoInstaller_AddReg
+CopyFiles=SmplFilter_CoInstaller_CopyFiles
+[SmplFilter_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "wdfcoinstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+
+[SmplFilter_CoInstaller_CopyFiles]
+wdfcoinstaller$KMDFCOINSTALLERVERSION$.dll
+[SourceDisksFiles]
+wdfcoinstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+;
+;--- SmplFilter WDF sections ------
+;
+[SmplFilter.NT.Wdf]
+KmdfService = SmplFilter, SmplFilter_wdfsect
+[SmplFilter_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+[Strings]
+;
+; Non-Localizable Strings
+;
+REG_SZ = 0x00000000
+REG_MULTI_SZ = 0x00010000
+REG_EXPAND_SZ = 0x00020000
+REG_BINARY = 0x00000001
+REG_DWORD = 0x00010001
+SERVICEROOT = "System\CurrentControlSet\Services"
+DAT = "datronicsoft"
+DiskId1 = "datronicsoft Installation Disk #1 (Mouse)"
+SmplFilter.SvcDesc="Training Course Keyboard Filter Driver"
+;
+; Localizable Strings
+;
+DAT.DeviceDesc11 = "Keyboard with SMPL Filter"
+DAT.DeviceDesc21 = "Keyboard with SMPL Filter"
+
+
+
+
+
+
+
