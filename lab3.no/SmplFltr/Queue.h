@@ -36,4 +36,4 @@ SmplFltrQueueInitialize(
 //
 EVT_WDF_IO_QUEUE_IO_DEVICE_CONTROL SmplFltrEvtIoDeviceControl;
 EVT_WDF_IO_QUEUE_IO_STOP SmplFltrEvtIoStop;
-
+EVT_WDF_IO_QUEUE_IO_DEFAULT SmplFltrEvtIoDefault;

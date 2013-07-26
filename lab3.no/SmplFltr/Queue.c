@@ -63,7 +63,7 @@ Return Value:
         WdfIoQueueDispatchParallel
         );
 
-    queueConfig.EvtIoDeviceControl = SmplFltrEvtIoDeviceControl;
+	queueConfig.EvtIoDefault = SmplFltrEvtIoDefault;
     queueConfig.EvtIoStop = SmplFltrEvtIoStop;
 
     status = WdfIoQueueCreate(
@@ -82,47 +82,21 @@ Return Value:
 }
 
 VOID
-SmplFltrEvtIoDeviceControl(
+SmplFltrEvtIoDefault(
     _In_ WDFQUEUE Queue,
-    _In_ WDFREQUEST Request,
-    _In_ size_t OutputBufferLength,
-    _In_ size_t InputBufferLength,
-    _In_ ULONG IoControlCode
+    _In_ WDFREQUEST Request
     )
-/*++
-
-Routine Description:
-
-    This event is invoked when the framework receives IRP_MJ_DEVICE_CONTROL request.
-
-Arguments:
-
-    Queue -  Handle to the framework queue object that is associated with the
-             I/O request.
-
-    Request - Handle to a framework request object.
-
-    OutputBufferLength - Size of the output buffer in bytes
-
-    InputBufferLength - Size of the input buffer in bytes
-
-    IoControlCode - I/O control code.
-
-Return Value:
-
-    VOID
-
---*/
 {
-    TraceEvents(TRACE_LEVEL_INFORMATION, 
-                TRACE_QUEUE, 
-                "!FUNC! Queue 0x%p, Request 0x%p OutputBufferLength %d InputBufferLength %d IoControlCode %d", 
-                Queue, Request, (int) OutputBufferLength, (int) InputBufferLength, IoControlCode);
+	BOOLEAN result;
+	WDF_REQUEST_SEND_OPTIONS Options;
 
-    WdfRequestComplete(Request, STATUS_SUCCESS);
+    WDF_REQUEST_SEND_OPTIONS_INIT( &Options, WDF_REQUEST_SEND_OPTION_SEND_AND_FORGET );
 
-    return;
+	result = WdfRequestSend( Request, WdfDeviceGetIoTarget(WdfIoQueueGetDevice(Queue)), &Options );
+
+	DbgPrintEx( DPFLTR_IHVDRIVER_ID, 1234, "SmplFilterEvtIoDefault\n" );
 }
+
 
 VOID
 SmplFltrEvtIoStop(
