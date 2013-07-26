@@ -54,6 +54,8 @@ Return Value:
     WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&deviceAttributes, DEVICE_CONTEXT);
 
 	WdfFdoInitSetFilter(DeviceInit);
+	WdfDeviceInitSetDeviceType(DeviceInit, FILE_DEVICE_KEYBOARD);
+
     status = WdfDeviceCreate(&DeviceInit, &deviceAttributes, &device);
 
 
@@ -88,7 +90,7 @@ Return Value:
             //
             // Initialize the I/O Package and any Queues
             //
-            //status = SmplFltrQueueInitialize(device);
+            status = SmplFltrQueueInitialize(device);
         }
     }
 

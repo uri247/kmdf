@@ -28,7 +28,6 @@ SmplFltr.sys  = 1,,
 %ManufacturerName%=Standard,NT$ARCH$
 
 [Standard.NT$ARCH$]
-;%SmplFltr.DeviceDesc%=SmplFltr_Device, Root\SmplFltr ; TODO: edit hw-id
 %SmplFltr.DeviceDesc%=SmplFltr_Device, *PNP0303
 
 [SmplFltr_Device.NT]
@@ -41,7 +40,7 @@ SmplFltr.sys
 
 ;-------------- Service installation
 [SmplFltr_Device.NT.Services]
-AddService = SmplFltr,%SPSVCINST_ASSOCSERVICE%, SmplFltr_Service_Inst
+AddService = SmplFltr,, SmplFltr_Service_Inst
 ; Install the generic keyboard driver from keyboard.inf
 Include=keyboard.inf
 Needs=STANDARD_Inst.Services
@@ -49,11 +48,11 @@ Needs=STANDARD_Inst.Services
 ; -------------- SmplFltr driver install sections
 [SmplFltr_Service_Inst]
 DisplayName    = %SmplFltr.SVCDESC%
-ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVE
 StartType      = 3               ; SERVICE_DEMAND_START
-ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ErrorControl   = 0               ; SERVICE_ERROR_NORMAL
+LoadOrderGroup = Keyboard Port
 ServiceBinary  = %12%\SmplFltr.sys
-LoadOrderGroup = Extended Base
 
 
 [SmplFltr_Device.NT.HW]
@@ -61,10 +60,10 @@ LoadOrderGroup = Extended Base
 AddReg = SmplFltr_Device.HW.AddReg
 ; run the directives need by the port driver
 Include=keyboard.inf
-;Needs=HID_Inst.NT.Services
+Needs=STANDARD_Inst.HW
 
 [SmplFltr_Device.HW.AddReg]
-HKLM,"SYSTEM\CurrentControlSet\Control\Class\{4D36E96B-E325-11CE-BFC1-08002BE10318}","UpperFilters",0x00010008,"SmplFltr"
+HKR,,"UpperFilters",0x00010000,"SmplFltr"
 
 
 

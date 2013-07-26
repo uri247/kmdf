@@ -73,9 +73,7 @@ Return Value:
     WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
     attributes.EvtCleanupCallback = SmplFltrEvtDriverContextCleanup;
 
-    WDF_DRIVER_CONFIG_INIT(&config,
-                           SmplFltrEvtDeviceAdd
-                           );
+    WDF_DRIVER_CONFIG_INIT( &config, SmplFltrEvtDeviceAdd );
 
     status = WdfDriverCreate(DriverObject,
                              RegistryPath,
