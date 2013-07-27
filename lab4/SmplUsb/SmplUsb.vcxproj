@@ -69,7 +69,7 @@
     <Inf Include="SmplUsb.inf" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6E59870C-5CFD-40D8-A43F-26D21787DAAF}</ProjectGuid>
+    <ProjectGuid>{A7716029-DB02-412D-BC9F-E7CB05A85380}</ProjectGuid>
     <TemplateGuid>{8c0e3d8b-df43-455b-815a-4a0e72973bc6}</TemplateGuid>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>

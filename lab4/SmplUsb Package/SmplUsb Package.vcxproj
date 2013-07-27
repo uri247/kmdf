@@ -51,7 +51,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{159BDA1C-2AD5-4578-AEF4-6DD6B9659589}</ProjectGuid>
+    <ProjectGuid>{E5E0B5D7-CB34-4CF9-B60C-598C33385A79}</ProjectGuid>
     <TemplateGuid>{4605da2c-74a5-4865-98e1-152ef136825f}</TemplateGuid>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
@@ -146,7 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SmplUsb\SmplUsb.vcxproj">
-      <Project>{6e59870c-5cfd-40d8-a43f-26d21787daaf}</Project>
+      <Project>{a7716029-db02-412d-bc9f-e7cb05a85380}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
