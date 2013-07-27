@@ -1,0 +1,103 @@
+;
+; SmplUsb.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=USBDevice
+ClassGuid={88BAE032-5A81-49f0-BC3D-A4FF138216D6}
+Provider=%ManufacturerName%
+CatalogFile=SmplUsb.cat
+DriverVer=
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+SmplUsb.sys  = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%SmplUsb.DeviceDesc%=SmplUsb_Device, USB\VID_vvvv&PID_pppp
+
+[SmplUsb_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+SmplUsb.sys
+
+[SmplUsb_Device.NT.HW]
+AddReg=SmplUsb_AddReg
+
+[SmplUsb_AddReg]
+; By default, USBDevice class uses iProduct descriptor to name the device in
+; Device Manager on Windows 8 and higher.
+; Uncomment for this device to use %DeviceName% on Windows 8 and higher:
+;HKR,,FriendlyName,,%SmplUsb.DeviceDesc%
+
+;-------------- Class definition
+
+[ClassInstall32]
+AddReg = ClassInstall_AddReg
+
+[ClassInstall_AddReg]
+HKR,,,,%ClassName%
+HKR,,NoInstallClass,,1
+HKR,,IconPath,%REG_MULTI_SZ%,"%systemroot%\system32\setupapi.dll,-20"
+HKR,,LowerLogoVersion,,5.2
+
+;-------------- Service installation
+[SmplUsb_Device.NT.Services]
+AddService = SmplUsb,%SPSVCINST_ASSOCSERVICE%, SmplUsb_Service_Inst
+
+; -------------- SmplUsb driver install sections
+[SmplUsb_Service_Inst]
+DisplayName    = %SmplUsb.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\SmplUsb.sys
+LoadOrderGroup = Extended Base
+
+;
+;--- SmplUsb_Device Coinstaller installation ------
+;
+
+[DestinationDirs]
+SmplUsb_Device_CoInstaller_CopyFiles = 11
+
+[SmplUsb_Device.NT.CoInstallers]
+AddReg=SmplUsb_Device_CoInstaller_AddReg
+CopyFiles=SmplUsb_Device_CoInstaller_CopyFiles
+
+[SmplUsb_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[SmplUsb_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[SourceDisksFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+[SmplUsb_Device.NT.Wdf]
+KmdfService =  SmplUsb, SmplUsb_wdfsect
+[SmplUsb_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName=""
+ClassName="Universal Serial Bus devices"
+DiskName = "SmplUsb Installation Disk"
+SmplUsb.DeviceDesc = "SmplUsb Device"
+SmplUsb.SVCDESC = "SmplUsb Service"
+REG_MULTI_SZ = 0x00010000
