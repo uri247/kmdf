@@ -57,6 +57,9 @@
     <ClCompile Include="Device.c" />
     <ClCompile Include="Driver.c" />
     <ClCompile Include="Queue.c" />
+    <ClCompile Include="Usb.c">
+      <WppEnabled Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">true</WppEnabled>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h" />

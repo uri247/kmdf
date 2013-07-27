@@ -47,3 +47,10 @@ SmplUsbCreateDevice(
 // handle
 //
 EVT_WDF_DEVICE_PREPARE_HARDWARE SmplUsbEvtDevicePrepareHardware;
+
+
+
+
+// ------------ Usb.c
+
+NTSTATUS SmplUsbIoTargetInitialize( _In_ WDFDEVICE Device );
