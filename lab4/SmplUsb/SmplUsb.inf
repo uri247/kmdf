@@ -27,7 +27,10 @@ SmplUsb.sys  = 1,,
 %ManufacturerName%=Standard,NT$ARCH$
 
 [Standard.NT$ARCH$]
-%SmplUsb.DeviceDesc%=SmplUsb_Device, USB\VID_vvvv&PID_pppp
+;%SmplUsb.DeviceDesc%=SmplUsb_Device, USB\VID_vvvv&PID_pppp
+;%SmplUsb.DeviceDesc%=SmplUsb_Device, HID\VID_0E0F&PID_0007
+;%SmplUsb.DeviceDesc%=SmplUsb_Device, USB\VID_0E0F&PID_0008
+%SmplUsb.DeviceDesc%=SmplUsb_Device, HID\VID_045E&PID_007D
 
 [SmplUsb_Device.NT]
 CopyFiles=Drivers_Dir

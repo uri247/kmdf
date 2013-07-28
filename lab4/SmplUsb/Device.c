@@ -76,7 +76,7 @@ Return Value:
         //
         // Initialize the context.
         //
-        deviceContext->PrivateDeviceData = 0;
+        //deviceContext->PrivateDeviceData = 0;
 
         //
         // Create a device interface so that applications can find and talk
@@ -131,7 +131,6 @@ Return Value:
     TraceEvents(TRACE_LEVEL_INFORMATION, TRACE_DRIVER, "%!FUNC! Entry");
 
 	status = SmplUsbIoTargetInitialize( Device );
-
 
     TraceEvents(TRACE_LEVEL_INFORMATION, TRACE_DRIVER, "%!FUNC! Exit");
     return status;

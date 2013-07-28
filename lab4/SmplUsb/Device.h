@@ -23,7 +23,10 @@ Environment:
 typedef struct _DEVICE_CONTEXT
 {
     WDFUSBDEVICE UsbDevice;
-    ULONG PrivateDeviceData;  // just a placeholder
+
+	WDFUSBPIPE UsbInterruptPipe;
+	ULONG UsbInterruptMaximumPacketSize;
+	WDFIOTARGET UsbSpecializedIoTarget;
 
 } DEVICE_CONTEXT, *PDEVICE_CONTEXT;
 
@@ -54,3 +57,6 @@ EVT_WDF_DEVICE_PREPARE_HARDWARE SmplUsbEvtDevicePrepareHardware;
 // ------------ Usb.c
 
 NTSTATUS SmplUsbIoTargetInitialize( _In_ WDFDEVICE Device );
+void SmplUsbIoTargetInterfaceTrace( WDFUSBINTERFACE TargetInterface );
+BOOLEAN SmplUsbPipeTypeInterrupt( _In_ WDFUSBINTERFACE TargetInterface, _Out_ PDEVICE_CONTEXT pSmplDeviceContext );
+
